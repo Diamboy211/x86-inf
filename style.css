@@ -1,0 +1,15 @@
+*
+{
+  font-family: 'Inconsolata', monospace;
+}
+
+#assembly-area > *
+{
+  white-space: pre-line;
+}
+
+#disassembly, #registers, #memory, #stack
+{
+  white-space: pre-line;
+  display: inline-block;
+}

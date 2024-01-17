@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wdth,wght@100,400&display=swap" rel="stylesheet">
+
+    <title>x86-inf vm</title>
+    <script type="module" src="constant.js" defer></script>
+    <script type="module" src="compiler.js" defer></script>
+    <script type="module" src="vm.js" defer></script>
+    <script type="module" src="main.js" defer></script>
+  </head>
+  <body>
+    <div id="assembly-area">
+      <textarea id="editor" cols="80" rows="25"></textarea>
+      <br />
+      <button id="compile">compile</button>
+      <div id="log"></div>
+    </div>
+    <div id="vm-area">
+      <div id="disassembly"></div>
+      <div id="registers"></div>
+      <div id="memory"></div>
+      <div id="stack"></div>
+      <div id="control">
+        <button id="reset">reset</button>
+        <button id="step">step</button>
+      </div>
+    </div>
+  </body>
+</html>
