@@ -22,13 +22,41 @@
       <div id="log"></div>
     </div>
     <div id="vm-area">
-      <div id="disassembly"></div>
-      <div id="registers"></div>
-      <div id="memory"></div>
-      <div id="stack"></div>
-      <div id="control">
+      <div class="vmc" id="control">
         <button id="reset">reset</button>
         <button id="step">step</button>
+        <button id="skip">skip</button>
+        <br />
+        <span>auto-steps per second</span>
+        <input id="auto-step" type="number" min="0" placeholder="0" step="0.001">
+        <br />
+        <span id="vm-log"></span>
+      </div>
+      <div class="vmc">
+        <span>disassembly:</span>
+        <br />
+        <span class="raw" id="disassembly"></span>
+      </div>
+      <div class="vmc">
+        <span>registers:</span>
+        <br />
+        <span class="raw" id="registers"></span>
+      </div>
+      <div class="vmc">
+        <span>page:</span>
+        <input id="memory-page" type="number" min="0" placeholder="0">
+        <br />
+        <span>memory:</span>
+        <br />
+        <span class="raw" id="memory"></span>
+      </div>
+      <div class="vmc">
+        <span>page:</span>
+        <input id="stack-page" type="number" min="0" placeholder="0">
+        <br />
+        <span>stack:</span>
+        <br />
+        <span class="raw" id="stack"></span>
       </div>
     </div>
   </body>
