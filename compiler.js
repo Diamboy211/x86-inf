@@ -188,6 +188,10 @@ export function assemble(tokens)
       switch (instruction_table[c.str].mode)
       {
       case 0: // 0 arguments
+      case 5:
+      case 7:
+      case 4: // technically 1 argument
+      case 6:
       {
         code.push(instruction_table[c.str].op);
         break;

@@ -8,8 +8,21 @@
   white-space: pre-line;
 }
 
-#disassembly, #registers, #memory, #stack
+.vmc
+{
+  display: inline-block;
+  width: calc(20% - 4px);
+  border: 2px solid black;
+  margin: 2px;
+  padding: 2px;
+}
+
+.raw
 {
   white-space: pre-line;
-  display: inline-block;
+}
+
+#vm-area
+{
+  display: flex;
 }
