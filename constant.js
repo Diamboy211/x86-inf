@@ -5,7 +5,7 @@
  * format: (op) (null-terminated string)
  * mode 2: 1 arg, reg/mem
  * format: (op) (reg_to_number(reg/mem))
- * mode 3: 2 arg, reg,reg / reg,mem / mem,reg
+ * mode 3: 2 arg, reg/mem, reg/mem
  * format: (op) (reg_to_number(1st operand)) (reg_to_number(2nd operand))
  * mode 4: 1 arg, mode 5 instruction (rep)
  * format: (op) (op for mode 5 instruction)

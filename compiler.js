@@ -112,11 +112,6 @@ export function assemble(tokens)
         }
         let a2 = get_mem_or_reg();
         if (!a2) break;
-        if (a1.type && a2.type)
-        {
-          errors.push(`line ${c.line_number}: invalid addressing mode \`${c.str} mem, mem\``);
-          break;
-        }
         break;
       }
       case 4:
