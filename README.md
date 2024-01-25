@@ -58,26 +58,26 @@ instructions currently avaliable:
 -
 
 ---
-* mov reg,reg / reg,mem / mem,reg
+* mov reg/mem, reg/mem
 * xlat
 ---
-* add reg,reg / reg,mem / mem,reg
-* sub reg,reg / reg,mem / mem,reg
+* add reg/mem, reg/mem
+* sub reg/mem, reg/mem
 * inc reg / mem
 * dec reg / mem
-* idiv reg,reg / reg,mem / mem,reg
-* mul/imul reg,reg / reg,mem / mem,reg (it can be proven that mul and imul are the same with infinite-width registers)
+* idiv reg/mem, reg/mem
+* mul/imul reg/mem, reg/mem (it can be proven that mul and imul are the same with infinite-width registers)
 * neg reg / mem
 ---
-* cmp reg,reg / reg,mem / mem,reg
-* test reg,reg / reg,mem / mem,reg
+* cmp reg/mem, reg/mem
+* test reg/mem, reg/mem
 ---
-* and reg,reg / reg,mem / mem,reg
-* or reg,reg / reg,mem / mem,reg
-* xor reg,reg / reg,mem / mem,reg
+* and reg/mem, reg/mem
+* or reg/mem, reg/mem
+* xor reg/mem, reg/mem
 * not reg / mem
-* shl/sal reg,reg / reg,mem / mem,reg (due to the lack of an MSB, logical and arithmetic shifts are the exact same)
-* shr/sar reg,reg / reg,mem / mem,reg
+* shl/sal reg/mem, reg/mem (due to the lack of an MSB, logical and arithmetic shifts are the exact same)
+* shr/sar reg/mem, reg/mem
 ---
 * label: (yes defining a label is an instruction. the label is embedded in the code as a null-terminated string, prefixed by the define label opcode. for the reason, see philosophy)
 * jmp label (due to the behavior of labels, jmp searches the entire code for the correct label to jump to. the same is true for other control flow instructions)
@@ -174,4 +174,16 @@ factorial_of_zero_or_one:
 xor wax, wax
 inc wax
 ret
+```
+fill memory with the fibonacci sequence:
+```asm
+inc wsi
+inc [wsi]
+inc wdi
+inc wdi
+loop:
+movsb
+add [wsi], [wbx]
+inc wbx
+jmp loop
 ```
