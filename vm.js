@@ -613,6 +613,28 @@ export class VM
     let r = this.data.read(ax + bx);
     this.mwrite(1, r);
   }
+  dump()
+  {
+    let d = {
+      registers: {},
+      flags: {},
+    };
+    for (let i = 0; i < 16; i++)
+      d.registers[number_to_reg[i+1]] = this.registers[i];
+    d.ip = this.ip;
+    if (this.code) d.code = [...this.code];
+    if (this.data) d.data = [...this.data.mem];
+    if (this.stack) d.stack = [...this.stack.mem];
+    d.flags.Z = this.ZF;
+    d.flags.S = this.SF;
+    d.flags.D = this.DF;
+    d.running = this.running;
+    d.timestamp = this.timestamp;
+    return JSON.stringify(d, (key, value) => {
+      if (typeof(value) == "bigint") return value.toString();
+      return value;
+    });
+  }
 }
 
 export function disassemble(code, ip, lines)

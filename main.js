@@ -115,6 +115,11 @@ function skip()
   }
 }
 
+function dump()
+{
+  navigator.clipboard.writeText(vm.dump());
+}
+
 function auto_step()
 {
   let start = Date.now();
@@ -172,6 +177,7 @@ document.getElementById("compile").addEventListener("click", e => compile());
 document.getElementById("reset").addEventListener("click", e => reset());
 document.getElementById("step").addEventListener("click", e => step());
 document.getElementById("skip").addEventListener("click", e => skip());
+document.getElementById("dump").addEventListener("click", e => dump());
 document.getElementById("memory-page").addEventListener("input", e => update_vm());
 document.getElementById("stack-page").addEventListener("input", e => update_vm());
 
