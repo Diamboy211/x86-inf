@@ -29,7 +29,7 @@ export const op = instr.map(e =>
 	return assemble([{ line: 1, str: i }]).code;
 });
 
-export const lower_bound = -64n, upper_bound = 64n;
+export const lower_bound = -32n, upper_bound = 32n;
 
 export function code_mul(code1, code2)
 {
@@ -75,20 +75,4 @@ export function code_add(code1, code2)
 	let order2 = order(code2);
 	if (order1 > order2) return code2;
 	return code1;
-}
-
-export function code_square(matrix)
-{
-	let out = {};
-	for (let i = lower_bound; i <= upper_bound; i++)
-	{
-		out[i] = {};
-		for (let j = lower_bound; j <= upper_bound; j++)
-			out[i][j] = null;
-	}
-	for (let y = lower_bound; y <= upper_bound; y++)
-		for (let x = lower_bound; x <= upper_bound; x++)
-			for (let i = lower_bound; i <= upper_bound; i++)
-				out[y][x] = code_add(out[y][x], code_mul(matrix[y][i], matrix[i][x]));
-	return out;
 }

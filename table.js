@@ -1,7 +1,7 @@
 import { VM } from "./vm.js";
 import { assemble } from "./compiler.js";
 import { instruction_table, reg_to_number } from "./constant.js";
-import { lower_bound, upper_bound, op, instr, code_add, code_square } from "./table_common.js";
+import { lower_bound, upper_bound, op, instr, code_add } from "./table_common.js";
 
 
 let vm = new VM();
