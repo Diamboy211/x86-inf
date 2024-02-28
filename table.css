@@ -1,0 +1,12 @@
+*
+{
+  font-family: 'Inconsolata', monospace;
+}
+span
+{
+  white-space: nowrap;
+}
+table, th, td
+{
+  border: 1px solid black;
+}
