@@ -644,14 +644,16 @@ export function disassemble(code, ip, lines)
   while (lines-- && ip < code.length)
   {
     let op = code[ip];
-    if (op == instruction_table["$label"].op)
+    while (op == instruction_table["$label"].op)
     {
       ip++;
       let name = "";
       while (code[ip]) name = `${name}${String.fromCharCode(code[ip++])}`;
       dis.push(`${name}:`);
       op = code[++ip];
+      if (ip >= code.length) break;
     }
+    if (ip >= code.length) break;
     let s = opcode_table[op].inst;
     switch (opcode_table[op].mode)
     {
