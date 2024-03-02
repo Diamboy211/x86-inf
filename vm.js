@@ -50,6 +50,7 @@ export class VM
     this.flags = 0n;
     this.running = false;
     this.t = 0n;
+    this.label_cache = {};
   }
   set_code(code)
   {
@@ -64,6 +65,7 @@ export class VM
     this.flags = 0n;
     this.running = true;
     this.t = 0n;
+    this.label_cache = {};
   }
   skip()
   {
@@ -418,6 +420,10 @@ export class VM
   }
   mfindlabel(start)
   {
+    let str = [];
+    for (let i = start; this.code[i]; i++) str.push(this.code[i]);
+    str = str.join('');
+    if (this.label_cache.hasOwnProperty(str)) return this.label_cache[str];
     let i = 0n;
     while (i < BigInt(this.code.length))
     {
@@ -430,7 +436,8 @@ export class VM
         a++;
         b++;
       }
-      if (this.code[a] == this.code[b]) return i;
+      if (this.code[a] == this.code[b])
+        return this.label_cache[str] = i;
 
       // skip label
       while (this.code[i++] != 0);
@@ -481,6 +488,7 @@ export class VM
   {
     let r1 = this.mread(a);
     let r2 = this.mread(b);
+    if (r2 == 0) throw "div0";
     let r = r1 / r2;
     this.mwrite(a, r);
   }
