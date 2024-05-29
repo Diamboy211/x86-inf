@@ -120,6 +120,17 @@ function dump()
   navigator.clipboard.writeText(vm.dump());
 }
 
+function rom()
+{
+  if (!assembled_code) return;
+  let a = document.createElement("a");
+  a.href = "data:application/octet-stream;base64,".concat(btoa(Array(...assembled_code).map(e=>String.fromCharCode(e)).join('')));
+  a.download = "rom.x86inf";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
 function auto_step()
 {
   let start = Date.now();
@@ -178,6 +189,7 @@ document.getElementById("reset").addEventListener("click", e => reset());
 document.getElementById("step").addEventListener("click", e => step());
 document.getElementById("skip").addEventListener("click", e => skip());
 document.getElementById("dump").addEventListener("click", e => dump());
+document.getElementById("rom").addEventListener("click", e => rom());
 document.getElementById("memory-page").addEventListener("input", e => update_vm());
 document.getElementById("stack-page").addEventListener("input", e => update_vm());
 

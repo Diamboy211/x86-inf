@@ -4,8 +4,9 @@ test architecture. i plan to implement a subset of the original 8086 instruction
 
 philosophy:
 -
-* procedural generation is the only option. therefore: numerical immediates (and as a result, addresses) are strictly disallowed
+* numerical immediates (and as a result, addresses) are strictly disallowed
 * future proofing. this architecture shall not have any limitations. this is why it has infinite memory, infinite width registers, and labels are defined as the way they are
+* von neumann is kinda cringe ngl. code and memory is seperated
 
 # technical details:
 
@@ -15,6 +16,41 @@ assembler:
 syntax: intel syntax without pointer sizes. no sections
 
 comments start with a semicolon
+
+register encoding:
+|register|value|
+|---|---|
+|wax|0x01|
+|wbx|0x02|
+|wcx|0x03|
+|wdx|0x04|
+|wsi|0x05|
+|wdi|0x06|
+|wbp|0x07|
+|wsp|0x08|
+|w8|0x09|
+|w9|0x0A|
+|w10|0x0B|
+|w11|0x0C|
+|w12|0x0D|
+|w13|0x0E|
+|w14|0x0F|
+|w15|0x10|
+|[wbx]|0x11|
+|[wsi]|0x12|
+|[wdi]|0x13|
+|[wbp]|0x14|
+|[wsp]|0x15|
+
+instruction encoding:
+|type|encoded as|
+|---|---|
+|instruction|(opcode)|
+|instruction label|(opcode) (null-terminated label's name)|
+|instruction reg/mem|(opcode) (encoded reg/mem)|
+|instruction reg/mem, reg/mem|(opcode) (encoded reg/mem1) (encoded reg/mem2)|
+|rep/repe/repz/repne/repnz instruction|(opcode of rep/repe/repz/repne/repnz) (opcode)|
+|label:|(label definition opcode) (null-terminated label's name)|
 
 execution environment:
 -
@@ -58,51 +94,54 @@ instructions currently avaliable:
 -
 
 ---
-* mov reg/mem, reg/mem (dst := src)
-* xlat (equivalent to mov wax, [wbx+wax])
+* (opcode: 0x01) mov reg/mem, reg/mem (dst := src)
+* (0x25) xlat (equivalent to mov wax, [wbx+wax])
 ---
-* add reg/mem, reg/mem (dst := dst + src, set flags)
-* sub reg/mem, reg/mem (dst := dst - src, set flags)
-* inc reg / mem (dst := dst + 1, set flags)
-* dec reg / mem (dst := dst - 1, set flags)
-* idiv reg/mem, reg/mem (dst := dst / src)
-* mul/imul reg/mem, reg/mem (dst := dst * src) (it can be proven that mul and imul are the same with infinite-width registers)
-* neg reg / mem (dst := -dst, set flags)
+* (0x02) add reg/mem, reg/mem (dst := dst + src, set flags)
+* (0x03) sub reg/mem, reg/mem (dst := dst - src, set flags)
+* (0x04) inc reg / mem (dst := dst + 1, set flags)
+* (0x05) dec reg / mem (dst := dst - 1, set flags)
+* (0x08) idiv reg/mem, reg/mem (dst := dst / src)
+* (0x09) mul/imul reg/mem, reg/mem (dst := dst * src) (it can be proven that mul and imul are the same with infinite-width registers)
+* (0x12) neg reg / mem (dst := -dst, set flags)
 ---
-* cmp reg/mem, reg/mem (dst - src, set flags)
-* test reg/mem, reg/mem (dst & src, set flags)
+* (0x0A) cmp reg/mem, reg/mem (dst - src, set flags)
+* (0x0B) test reg/mem, reg/mem (dst & src, set flags)
 ---
-* and reg/mem, reg/mem (dst := dst & src, set flags)
-* or reg/mem, reg/mem (dst := dst | src, set flags)
-* xor reg/mem, reg/mem (dst := dst ^ src, set flags)
-* not reg / mem (dst := ~dst, set flags)
-* shl/sal reg/mem, reg/mem (dst := dst << src) (due to the lack of an MSB, logical and arithmetic shifts are the exact same)
-* shr/sar reg/mem, reg/mem (dst := dst >> src)
+* (0x13) and reg/mem, reg/mem (dst := dst & src, set flags)
+* (0x14) or reg/mem, reg/mem (dst := dst | src, set flags)
+* (0x15) xor reg/mem, reg/mem (dst := dst ^ src, set flags)
+* (0x16) not reg / mem (dst := ~dst, set flags)
+* (0x1B) shl/sal reg/mem, reg/mem (dst := dst << src) (due to the lack of an MSB, logical and arithmetic shifts are the exact same)
+* (0x1C) shr/sar reg/mem, reg/mem (dst := dst >> src)
 ---
-* label: (yes defining a label is an instruction. the label is embedded in the code as a null-terminated string, prefixed by the define label opcode. for the reason, see philosophy)
-* jmp label (due to the behavior of labels, jmp searches the entire code for the correct label to jump to. the same is true for other control flow instructions)
-* jl / jnge label
-* jle / jng label
-* jg / jnle label
-* jge / jnl label
-* je / jz label
-* jne / jnz label
-* call label (push wip jmp label)
-* ret (pop wip)
+* (0x7F) label: (yes defining a label is an instruction. the label is embedded in the code as a null-terminated string, prefixed by the define label opcode. for the reason, see philosophy)
+* (0x06) jmp label (due to the behavior of labels, jmp searches the entire code for the correct label to jump to. the same is true for other control flow instructions)
+* (0x0C) jl / jnge label
+* (0x0D) jle / jng label
+* (0x0E) jg / jnle label
+* (0x0F) jge / jnl label
+* (0x10) je / jz label
+* (0x11) jne / jnz label
+* (0x19) call label (push wip jmp label)
+* (0x1A) ret (pop wip)
 ---
-* cld (DF := 0. if DF = 0, value+- is equivalent to value++)
-* std (DF := 1. if DF = 1, value+- is equivalent to value--)
-* (rep) movsb (mov [wdi+-], [wsi+-])
-* (rep) lodsb (mov wax, [wsi+-]) (rep for the lols)
-* (rep) stosb (mov [wdi+-], wax)
-* (repe/repz/repne/repnz) cmpsb (cmp [wdi+-], [wsi+-])
-* (repe/repz/repne/repnz) scasb (cmp wax, [wsi+-])
+* (0x1D) rep
+* (0x1E) repe/repz
+* (0x1F) repne/repnz
+* (0x20) cld (DF := 0. if DF = 0, value+- is equivalent to value++)
+* (0x21) std (DF := 1. if DF = 1, value+- is equivalent to value--)
+* (0x22) (rep) movsb (mov [wdi+-], [wsi+-])
+* (0x23) (rep) lodsb (mov wax, [wsi+-]) (rep for the lols)
+* (0x24) (rep) stosb (mov [wdi+-], wax)
+* (0x26) (repe/repz/repne/repnz) cmpsb (cmp [wdi+-], [wsi+-])
+* (0x27) (repe/repz/repne/repnz) scasb (cmp wax, [wsi+-])
 ---
-* push reg (mov [--wsp], src)
-* pop reg (mov dst, [wsp++])
+* (0x17) push reg (mov [--wsp], src)
+* (0x18) pop reg (mov dst, [wsp++])
 ---
-* hlt
-* int3 (breakpoint trap)
+* (0x07) hlt
+* (0x28) int3 (breakpoint trap)
 ---
 
 addressing modes avaliable:
