@@ -5,8 +5,8 @@ test architecture. i plan to implement a subset of the original 8086 instruction
 philosophy:
 -
 * numerical immediates (and as a result, addresses) are strictly disallowed
-* future proofing. this architecture shall not have any limitations. this is why it has infinite memory, infinite width registers, and labels are defined as the way they are
-* von neumann is kinda cringe ngl. code and memory is seperated
+* future proofing. this architecture shall not have any limitations. this is why it has infinite memory, infinite width bytes, and labels are defined as the way they are
+* von neumann is kinda cringe ngl. code and memory is separated
 
 # technical details:
 
@@ -15,7 +15,7 @@ assembler:
 
 syntax: intel syntax without pointer sizes. no sections
 
-comments start with a semicolon
+comments start with a semicolon and end before a newline
 
 register encoding:
 |register|value|
@@ -135,7 +135,7 @@ instructions currently avaliable:
 * (0x23) (rep) lodsb (mov wax, [wsi+-]) (rep for the lols)
 * (0x24) (rep) stosb (mov [wdi+-], wax)
 * (0x26) (repe/repz/repne/repnz) cmpsb (cmp [wdi+-], [wsi+-])
-* (0x27) (repe/repz/repne/repnz) scasb (cmp wax, [wsi+-])
+* (0x27) (repe/repz/repne/repnz) scasb (cmp wax, [wdi+-])
 ---
 * (0x17) push reg (mov [--wsp], src)
 * (0x18) pop reg (mov dst, [wsp++])
@@ -144,7 +144,7 @@ instructions currently avaliable:
 * (0x28) int3 (breakpoint trap)
 ---
 
-addressing modes avaliable:
+addressing modes available:
 -
 |mode|meaning|
 |---|---|
@@ -161,6 +161,8 @@ nitty gritty details:
 code is compiled to [cs:0x0]. execution also starts at [cs:0x0]
 
 hlt will stop the execution of the virtual machine
+
+the legal memory accesses are [ds:[0; +∞)] and [es:(-∞; -1]]
 
 the memory in the data segment, the memory in the stack segment and every general-purpose integer registers are initialized to 0 on start
 
