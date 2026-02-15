@@ -55,11 +55,11 @@ instruction encoding:
 execution environment:
 -
 
-this architecture uses infinite-width bytes. all integer registers are 1 byte long.
+this architecture uses infinite-width bytes that contain an infinite amount of bits. all integer registers are 1 byte long. arithmetic operations treat every value as encoded in two's complement with bits extending infinitely far to the left
 
 the cs, ds and ss segments do not overlap
 
-registers avaliable for general-purpose use:
+registers available for general-purpose use:
 -
 * wax
 * wbx
@@ -75,7 +75,7 @@ non-general purpose registers:
 -
 * wip
 
-unreadable and unwriteable registers:
+unreadable and unwritable registers:
 -
 * cs
 * ds
@@ -90,7 +90,7 @@ flags:
 * SF (sign flag)
 * DF (direction flag)
 
-instructions currently avaliable:
+instructions currently available:
 -
 
 ---
@@ -162,7 +162,7 @@ code is compiled to [cs:0x0]. execution also starts at [cs:0x0]
 
 hlt will stop the execution of the virtual machine
 
-the legal memory accesses are [ds:[0; +∞)] and [es:(-∞; -1]]
+the legal memory accesses are [ds:[0; +∞)] and [ss:(-∞; -1]]
 
 the memory in the data segment, the memory in the stack segment and every general-purpose integer registers are initialized to 0 on start
 
